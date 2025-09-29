@@ -12,6 +12,7 @@ import * as SplashScreen from "expo-splash-screen";
 export default function App() {
   const [userNumber, setUserNumber] = useState();
   const [gameIsOver, setGameIsOver] = useState(true);
+  const [roundsNumber, setRoundsNumber] = useState(0);
 
   SplashScreen.preventAutoHideAsync();
 
@@ -31,8 +32,14 @@ export default function App() {
     setGameIsOver(false);
   }
 
-  function gameOverHandler() {
+  function gameOverHandler(rounds) {
     setGameIsOver(true);
+    setRoundsNumber(rounds);
+  }
+
+  function onStartNewGameHandler() {
+    setUserNumber(null);
+    setRoundsNumber([]);
   }
 
   let screen = <StartGameScreen onPickedNumber={pickedNumberHandler} />;
@@ -43,7 +50,13 @@ export default function App() {
     );
   }
   if (gameIsOver && userNumber) {
-    screen = <GameOverScreen />;
+    screen = (
+      <GameOverScreen
+        userNumber={userNumber}
+        roundsNumber={roundsNumber}
+        onStartNewGame={onStartNewGameHandler}
+      />
+    );
   }
 
   return (
